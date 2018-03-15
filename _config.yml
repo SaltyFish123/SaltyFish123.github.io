@@ -1,0 +1,17 @@
+future: true
+permalink: /:title/
+url: http://saltyfish123.github.io
+name: Joey's blog
+author: Joey
+qq: 413486687
+email: 413486687@qq.com
+
+duoshuo: Joey
+beian: 
+cnzz: 
+weibo: 
+github: SaltyFish123
+about: "这里是 Joey 的个人博客，创建于 2018 年。"
+
+safe: true
+paginate: 20
