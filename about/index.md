@@ -8,8 +8,6 @@ comments: no
 
 {{ site.about }}
 
-无
-
 ----
 
 ###联系方式：
