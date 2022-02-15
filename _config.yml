@@ -14,7 +14,6 @@ github: SaltyFish123
 about: "这里是 Joey 的个人博客，创建于 2018 年。"
 
 plugins:
-  - jekyll-feed
   - jekyll-paginate
 
 safe: true
