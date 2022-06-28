@@ -3,7 +3,7 @@ layout: post
 title: C++ const and constexpr
 date: 2022-06-24
 categories: C++
-tags: C++_keywords Effective_Morden_C++
+tags: C++_keywords Effective_Modern_C++
 ---
 
 The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors.
