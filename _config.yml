@@ -17,3 +17,5 @@ plugins:
 
 safe: true
 paginate: 20
+kramdown:
+  toc_level: 1..5
