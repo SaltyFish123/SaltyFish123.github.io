@@ -4,3 +4,4 @@ _site
 createPost.sh
 createDateFile.sh
 addTOC.sh
+startService.sh
