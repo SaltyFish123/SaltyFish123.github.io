@@ -6,6 +6,9 @@ categories: C++
 tags: C++_data_types
 ---
 
+* TOC
+{:toc}
+
 ## Difference of being function parameters between pointer and reference
 
 Take a look at the following code:

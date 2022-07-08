@@ -6,6 +6,9 @@ categories: C++
 tags: C++_data_types
 ---
 
+* TOC
+{:toc}
+
 The following diagram illustrates the relationships between the categories:
 
 ![diagram](https://docs.microsoft.com/en-us/cpp/cpp/media/value_categories.png?view=msvc-160)

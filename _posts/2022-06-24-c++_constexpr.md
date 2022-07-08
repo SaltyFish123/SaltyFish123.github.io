@@ -6,6 +6,9 @@ categories: C++
 tags: C++_keywords Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors.
 
 The primary difference between const and constexpr variables is that the initialization of a const variable can be deferred until run time. A constexpr variable must be initialized at compile time. All constexpr variables are const.

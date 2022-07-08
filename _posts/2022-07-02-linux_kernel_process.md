@@ -6,6 +6,9 @@ categories: Linux_Kernel
 tags: Understanding_the_Linux_Kernel
 ---
 
+* TOC
+{:toc}
+
 ## Processes, Lightweight Processes, and Threads
 
 From the kernel's point of view, the purpose of a process is to act as an entity to which system resources (CPU time, memory, etc.) are allocated.

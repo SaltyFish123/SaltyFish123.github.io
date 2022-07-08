@@ -6,6 +6,9 @@ categories: Linux_Kernel concurrency
 tags: Understanding_the_Linux_Kernel
 ---
 
+* TOC
+{:toc}
+
 You could think of the kernel as a server that answers requests; these requests can come either from a process running on a CPU or an external device issuing an interrupt request. We make this analogy to underscore that parts of the kernel are not run serially, but in an interleaved way. Thus, they can give rise to race conditions, which must be controlled through proper synchronization techniques.
 
 ## Synchronization Primitives

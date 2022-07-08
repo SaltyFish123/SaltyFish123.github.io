@@ -6,6 +6,9 @@ categories: C++
 tags: Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 ## Item 7: Distinguish between () and {} when creating objects.
 
 Depending on your perspective, syntax choices for object initialization in C++11 embody either an embarrassment of riches or a confusing mess. As a general rule, initialization values may be specified with parentheses, an equals sign, or braces:

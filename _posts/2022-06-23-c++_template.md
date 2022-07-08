@@ -6,6 +6,9 @@ categories: C++
 tags: C++_keywords
 ---
 
+* TOC
+{:toc}
+
 ## C++ template function
 
 Explicit instantiation differs from explicit specialization. Explicit instantiation means that the template should create an instance function definition that use the explicit data type. And Explicit specicalization means that the template function should not create any instance. It should use a specific function definition that the code is different from the template definitoin. The following code demonstrates.

@@ -6,6 +6,9 @@ categories: C++
 tags: C++_keywords Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 ## Item 14: Declare functions noexcept if they won’t emit exceptions.
 
 For **stack unwinding**, you can read this [article](https://docs.microsoft.com/en-us/cpp/cpp/exceptions-and-stack-unwinding-in-cpp?view=msvc-170) to get more information.

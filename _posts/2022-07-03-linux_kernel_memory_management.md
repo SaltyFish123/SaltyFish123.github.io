@@ -6,6 +6,9 @@ categories: Linux_Kernel
 tags: Understanding_the_Linux_Kernel
 ---
 
+* TOC
+{:toc}
+
 Some portion of RAM is permanently assigned to the kernel and used to store both the kernel code and the static kernel data structures. The remaining part of the RAM is called dynamic memory. It is a valuable resource, needed not only by the processes but also by the kernel itself. In fact, the performance of the entire system depends on how efficiently dynamic memory is managed. Therefore, all current multitasking operating systems try to optimize the use of dynamic memory, assigning it only when it is needed and freeing it as soon as possible.
 
 ## Page Frame Management

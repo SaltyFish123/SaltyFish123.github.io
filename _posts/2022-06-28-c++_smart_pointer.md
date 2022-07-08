@@ -6,6 +6,9 @@ categories: C++
 tags: C++_std Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 ## shared_ptr
 
 There’s a control block for each object managed by std::shared_ptrs.

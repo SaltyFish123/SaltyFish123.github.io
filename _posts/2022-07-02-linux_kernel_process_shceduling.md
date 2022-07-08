@@ -6,6 +6,9 @@ categories: Linux_Kernel
 tags: Understanding_the_Linux_Kernel
 ---
 
+* TOC
+{:toc}
+
 ## Scheduling Policy
 
 The scheduling algorithm of traditional Unix operating systems must fulfill several conflicting objectives: fast process response time, good throughput for background jobs, avoidance of process starvation, reconciliation of the needs of low- and high-priority processes, and so on. The set of rules used to determine when and how to select a new process to run is called scheduling policy.

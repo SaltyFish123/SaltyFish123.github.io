@@ -6,6 +6,9 @@ categories: Linux_Kernel
 tags: Understanding_the_Linux_Kernel 
 ---
 
+* TOC
+{:toc}
+
 ## Memory Addresses
 
 There are three kinds of addresses as shown below:

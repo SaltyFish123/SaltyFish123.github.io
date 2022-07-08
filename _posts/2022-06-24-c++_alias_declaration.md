@@ -6,6 +6,9 @@ categories: C++
 tags: C++_keywords Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 Prefering alias declaration than typedef. It is much complicated to use typedef for template than the other. As the following code shows:
 
 ```cpp

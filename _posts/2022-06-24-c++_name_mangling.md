@@ -6,6 +6,9 @@ categories: C++
 tags: C++_std
 ---
 
+* TOC
+{:toc}
+
 Note that C++ compiler support the **name mangling** while C compiler didn't. Because C++ language supports function overload while C language doesn't. So that's why we need the extern "C" in C++. For example, I write a temp.c as the code shown below:
 
 ```c

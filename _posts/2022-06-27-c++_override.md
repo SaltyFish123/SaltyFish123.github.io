@@ -6,6 +6,9 @@ categories: C++
 tags: C++_keywords Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 For overriding to occur, several requirements must be met:
 
 * The base class function must be virtual.

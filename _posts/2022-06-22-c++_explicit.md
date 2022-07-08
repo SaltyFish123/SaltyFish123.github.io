@@ -6,6 +6,9 @@ categories: C++
 tags: C++_keywords
 ---
 
+* TOC
+{:toc}
+
 在c++中，explicit建议用于构造函数的声明，如下所示
 
 ```c++

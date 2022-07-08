@@ -6,6 +6,9 @@ categories: C++
 tags: C++_std
 ---
 
+* TOC
+{:toc}
+
 At first, it is important to learn about move semantics and perfect forwarding.
 
 * Move semantics makes it possible for compilers to replace expensive copying operations with less expensive moves. In the same way that copy constructors and copy assignment operators give you control over what it means to copy objects, move constructors and move assignment operators offer control over the semantics of moving. Move semantics also enables the creation of move-only types, such as std::unique_ptr, std::future, and std::thread.

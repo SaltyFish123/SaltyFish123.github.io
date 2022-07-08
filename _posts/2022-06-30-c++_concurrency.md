@@ -6,6 +6,9 @@ categories: C++ concurrency
 tags: C++_concurrency C++_keywords
 ---
 
+* TOC
+{:toc}
+
 This note is used to record the content that I read from the book [C++ Concurrency IN ACTION](https://www.amazon.com/C-Concurrency-Action-Practical-Multithreading/dp/1933988770).
 
 ## Concurrency

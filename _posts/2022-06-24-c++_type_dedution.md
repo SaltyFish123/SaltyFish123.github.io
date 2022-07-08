@@ -6,6 +6,9 @@ categories: C++
 tags: Effective_Modern_C++
 ---
 
+* TOC
+{:toc}
+
 ## Item 1 Understanding Template Type Deduction
 
 We can think of a function template as looking like this:
