@@ -248,7 +248,7 @@ Dump of assembler code for function main:
 End of assembler dump.
 ```
 
-Then we can disass the address of myAdd@plt to see the coressponding assembly code. According to the previous `info file` command, we can find that this code located at the section .plt.sec. At the address 0x0000555555555074, we find that the process will jump to the address 0x2f55(%rip) which means that the 0x2f55 + $rip = 0x2f55 + 0x000055555555507b = 0x555555557fd0. This is exactly the address of the myAdd@got.plt as the comment shows.
+Then we can disass the address of myAdd@plt to see the coressponding assembly code. According to the previous `info file` command, we can find that this code located at the section .plt.sec. `jmpq *0x2f55(%rip)` means the value stored at 0x2f55 + %rip is an address and CPU will jump to that address and execute the coressponding instruction. At the address 0x0000555555555074, we find that the process will jump to the address stored at 0x2f55(%rip) which means that the location address is stored at 0x2f55 + $rip = 0x2f55 + 0x000055555555507b = 0x555555557fd0. This is exactly the address of the myAdd@got.plt as the comment shows.
 
 ```shell
 (gdb) disass 0x555555555070
@@ -276,7 +276,7 @@ End of assembler dump.
 0x555555557fd0 <myAdd@got.plt>: 0x00007ffff7fc50f9
 ```
 
-If you `disass myAdd`, you will find that the 32bits of the address
+If you `disass myAdd`, you will find that the address 0x00007ffff7fc50f9 stored at 0x2f55(%rip) will point to the address of the text of myAdd function.
 
 ```shell
 (gdb) disass myAdd
