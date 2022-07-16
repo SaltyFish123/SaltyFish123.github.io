@@ -314,7 +314,7 @@ int main()
 }
 ```
 
-In most cases this is what you want, but you can specify which to use with an additional parameter to std::async before the function to call. This parameter is of the type std::launch , and can either be std::launch::deferred to indicate that the function call is to be deferred until either wait() or get() is called on the future, std::launch::async to indicate that the function must be run on its own thread, or std::launch::deferred | std::launch::async to indicate that the implementation may choose. This last option is the default. If the function call is deferred, it may never actually run.
+In most cases this is what you want, but you can specify which to use with an additional parameter to std::async before the function to call. This parameter is of the type std::launch , and can either be std::launch::deferred to indicate that the function call is to be deferred until either wait() or get() is called on the future, std::launch::async to indicate that the function must be run on its own thread, or std::launch::deferred \| std::launch::async to indicate that the implementation may choose. This last option is the default. If the function call is deferred, it may never actually run.
 
 ```cpp
 auto f6=std::async(std::launch::async,Y(),1.2);//Run in new thread
