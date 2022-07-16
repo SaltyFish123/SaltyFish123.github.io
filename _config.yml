@@ -17,5 +17,7 @@ plugins:
 
 safe: true
 paginate: 20
+markdown: kramdown
 kramdown:
   toc_level: 1..5
+  math_engine: katex
