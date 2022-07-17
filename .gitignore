@@ -5,3 +5,5 @@ createPost.sh
 createDateFile.sh
 addTOC.sh
 startService.sh
+replacePNG.sh
+
