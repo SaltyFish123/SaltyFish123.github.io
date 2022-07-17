@@ -66,7 +66,7 @@ The slab allocator groups objects into caches. Each cache is a "store" of object
 
 The area of main memory that contains a cache is divided into slabs ; each slab consists of one or more contiguous page frames that contain both allocated and free objects (see Figure 8-3).
 
-![slab allocator](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/_posts/images/linux_kernel/figure_8_3.png?raw=true)
+![slab allocator](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/linux_kernel/figure_8_3.png?raw=true)
 
 You can get more information about slab allocator with this [instrocution](https://hammertux.github.io/slab-allocator#:~:text=The%20slab%20allocator%20in%20Linux%20sits%20on%20top,used%20objects%20available%20for%20allocation%20in%20the%20kernel.)
 

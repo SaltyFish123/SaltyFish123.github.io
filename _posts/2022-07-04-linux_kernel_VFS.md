@@ -38,7 +38,7 @@ The key idea behind the VFS consists of introducing a common file model capable 
 
 Figure 12-2 illustrates with a simple example how processes interact with files. Three different processes have opened the same file, two of them using the same hard link. In this case, each of the three processes uses its own file object, while only two dentry objects are require done for each hard link. Both dentry objects refer to the same inode object, which identifies the superblock object and, together with the latter, the common disk file.
 
-![VFS objects](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/_posts/images/linux_kernel/VFS_objects.png?raw=true)
+![VFS objects](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/linux_kernel/VFS_objects.png?raw=true)
 
 Besides providing a common interface to all filesystem implementations, the VFS has another important role related to system performance. The most recently used dentry objects are contained in a disk cache named the dentry cache , which speeds up the translation from a file pathname to the inode of the last pathname component. Generally speaking, a disk cache is a software mechanism that allows the kernel to keep in RAM some information that is normally stored on a disk, so that further accesses to that data can be quickly satisfied without a slow access to the disk itself.
 
@@ -97,7 +97,7 @@ The fd field of process descriptor points to an array of pointers to file object
 
 For every file with an entry in the fd array, the array index is the file descriptor. Usually, the first element (index 0) of the array is associated with the standard input of the process, the second with the standard output, and the third with the standard error (see Figure 12-3). Unix processes use the file descriptor as the main file identifier. Notice that, thanks to the dup( ) , dup2( ) , and fcntl( ) system calls, two file descriptors may refer to the same opened file that is, two elements of the array could point to the same file object. Users see this all the time when they use shell constructs such as 2>&1 to redirect the standard error to the standard output.
 
-![fd array](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/_posts/images/linux_kernel/fd_array.png?raw=true)
+![fd array](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/linux_kernel/fd_array.png?raw=true)
 
 ### Filesystem Handling
 

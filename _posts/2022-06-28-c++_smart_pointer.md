@@ -13,7 +13,7 @@ tags: C++_std Effective_Modern_C++
 
 There’s a control block for each object managed by std::shared_ptrs.
 
-![shared_ptr control block](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/_posts/images/c++_notes/shared_ptr_control_block.png?raw=true)
+![shared_ptr control block](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/c++_notes/shared_ptr_control_block.png?raw=true)
 
 An object’s control block is set up by the function creating the first std::shared_ptr to the object. At least that’s what’s supposed to happen. In general, it’s impossible for a function creating a std::shared_ptr to an object to know whether some other std::shared_ptr already points to that object, so the following rules for control block creation are used:
 
