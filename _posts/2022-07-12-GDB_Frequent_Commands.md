@@ -91,7 +91,7 @@ Breakpoint 1, main () at temp.c:98
 98      int main(){
 ```
 
-As an example, suppose we use the libc fucntion `mommove` and `memcpy`. When we compile our code, the compiler won’t resolve implementation of the function **memmove**. It only verifies the syntactical checking. The tool chain leaves a stub in our application which will be filled by dynamic linker. Since **memmove** is standard function the compiler implicitly invoking its shared library.
+As an example, suppose we use the libc fucntion `mommove` and `memcpy`. When we compile our code, the compiler won't resolve implementation of the function **memmove**. It only verifies the syntactical checking. The tool chain leaves a stub in our application which will be filled by dynamic linker. Since **memmove** is standard function the compiler implicitly invoking its shared library.
 
 Note that if you try to break in the caller and wish to step into the memmove call, you will fail. Since the implementation of **memmove** is loaded into memory within the shared library by the program. You can use the **ldd** to see the shared library dependencies of the program. For example, the **memmove** is within the libc.so.6 loaded by temp.exe as shown below.
 
@@ -207,7 +207,7 @@ Whether detach one of the processes after a fork, or retain debugger control ove
 
 Show whether detach-on-fork mode is on/off.
 
-If you choose to set ‘detach-on-fork’ mode off, then GDB will retain control of all forked processes (including nested forks). You can list the forked processes under the control of GDB by using the info inferiors command, and switch from one fork to another by using the **inferior** command.
+If you choose to set ‘detach-on-fork' mode off, then GDB will retain control of all forked processes (including nested forks). You can list the forked processes under the control of GDB by using the info inferiors command, and switch from one fork to another by using the **inferior** command.
 
 To quit debugging one of the forked processes, you can either detach from it by using the detach inferiors command (allowing it to run independently), or kill it using the kill inferiors command.
 

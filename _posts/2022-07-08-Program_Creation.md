@@ -29,17 +29,17 @@ For C/C++ language, the compiler gcc/g++ are used to do preprocessing, compilati
 
 When the program is executed, it is loaded into the RAM and become a process. The following diagram shows the steps:
 
-![Process Creation](https://www.tenouk.com/ModuleW_files/ccompilerlinker001.png)
+![Process Creation](https://www.tenouk.com/ModuleW_files/ccompilerlinker001.png?raw=true)
 
 As the system creates or augments a process image, it logically copies a file's segment to a virtual memory segment. When—and if—the system physically reads the file depends on the program's execution behavior, system load, etc. A process does not require a physical page unless it references the logical page during execution, and processes commonly leave many pages unreferenced. Therefore delaying physical reads frequently obviates them, improving system performance. To obtain this efficiency in practice, executable and shared object files must have segment images whose file offsets and virtual addresses are congruent,modulo the page size.
 
 As the following image shows, the sections of the executable file are loaded into the virtual memory to compose the segments of the process.
 
-![object file format](https://www.tenouk.com/ModuleW_files/ccompilerlinker004.png)
+![object file format](https://www.tenouk.com/ModuleW_files/ccompilerlinker004.png?raw=true)
 
 The memory layout of process is shown below. And it is created from the sections of the object file. For example, the data segment contain the data of the .data section of the object files.
 
-![progrss segments](https://www.tenouk.com/ModuleW_files/ccompilerlinker005.png)
+![progrss segments](https://www.tenouk.com/ModuleW_files/ccompilerlinker005.png?raw=true)
 
 One aspect of segment loading differs between executable files and shared objects. Executable file segments typically contain absolute code. To let the process execute correctly, the segments must reside at the virtual addresses used to build the executable file. Thus the system uses the p_vaddr values unchanged as virtual addresses.
 

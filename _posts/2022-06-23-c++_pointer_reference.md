@@ -52,7 +52,7 @@ constexpr std::size_t get_array_size(T (&)[N]) noexcept {
 
 Notice that the difference between **T& [N]** and **T (&)[N]**. **T& [N]** means an array of data type **T&** with size N. It is an array of reference and this is not allowed. **T (&)[N]** means that it is a reference of an array **T [N]** whose data type is T and size is N.
 
-Arrays aren’t the only things in C++ that can decay into pointers. Function types can decay into function pointers, and everything we’ve discussed regarding type deduction for arrays applies to type deduction for functions and their decay into function pointers. This rarely makes any difference in practice, but if you’re going to know about array-to-pointer decay, you might as well know about function-to-pointer decay, too. As the following code shows:
+Arrays aren't the only things in C++ that can decay into pointers. Function types can decay into function pointers, and everything we've discussed regarding type deduction for arrays applies to type deduction for functions and their decay into function pointers. This rarely makes any difference in practice, but if you're going to know about array-to-pointer decay, you might as well know about function-to-pointer decay, too. As the following code shows:
 
 ```cpp
 // someFunc is a function;
@@ -133,8 +133,8 @@ void f(std::vector<T>&& param);  // param is an rvalue reference
 void f(const T&& param);         // param is an rvalue reference
 ```
 
-When f is invoked, the type T will be deduced. But the form of param’s type declaration isn’t “T&&”, it’s “std::vector<T>&&”. That rules out the possibility that param is a universal reference. param is therefore an rvalue reference. Even the simple presence of a const qualifier is enough to disqualify a reference from being universal.
+When f is invoked, the type T will be deduced. But the form of param's type declaration isn't "T&&", it's "std::vector<T>&&". That rules out the possibility that param is a universal reference. param is therefore an rvalue reference. Even the simple presence of a const qualifier is enough to disqualify a reference from being universal.
 
-It is similar to the situation that auto is used. Variables declared with the type auto&& are universal references because type deduction takes place and they have the correct form (“T&&”).
+It is similar to the situation that auto is used. Variables declared with the type auto&& are universal references because type deduction takes place and they have the correct form ("T&&").
 
 We should use std::move() for the rvalue reference and std::forward() for the universal reference. So that we can avoid the undefined behaviour if we cast a non movable reference to a rvalue reference with the universal reference.

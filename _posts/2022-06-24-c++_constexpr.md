@@ -13,7 +13,7 @@ The keyword constexpr was introduced in C++11 and improved in C++14. It means co
 
 The primary difference between const and constexpr variables is that the initialization of a const variable can be deferred until run time. A constexpr variable must be initialized at compile time. All constexpr variables are const.
 
-A constexpr function or constructor is implicitly inline. Such functions produce compile-time constants when they are called with compile-time constants. If they’re called with values not known until runtime, they produce runtime values.
+A constexpr function or constructor is implicitly inline. Such functions produce compile-time constants when they are called with compile-time constants. If they're called with values not known until runtime, they produce runtime values.
 
 ```cpp
 constexpr int j = 10;
@@ -22,10 +22,10 @@ constexpr int i = j + 10;//Ok since j is a constant.
 constexpr int m = k + 10;//Compile error since k is not constant.
 ```
 
-Usage scenarios for constexpr objects become more interesting when constexpr functions are involved. Such functions produce compile-time constants when they are called with compile-time constants. If they’re called with values not known until runtime, they produce runtime values.
+Usage scenarios for constexpr objects become more interesting when constexpr functions are involved. Such functions produce compile-time constants when they are called with compile-time constants. If they're called with values not known until runtime, they produce runtime values.
 
-* constexpr functions can be used in contexts that demand compile-time constants. If the values of the arguments you pass to a constexpr function in such a context are known during compilation, the result will be computed during compilation. If any of the arguments’ values is not known during compilation, your code will be rejected.
-* When a constexpr function is called with one or more values that are not known during compilation, it acts like a normal function, computing its result at runtime. This means you don’t need two functions to perform the same operation, one for compile-time constants and one for all other values. The constexpr function does it all.
+* constexpr functions can be used in contexts that demand compile-time constants. If the values of the arguments you pass to a constexpr function in such a context are known during compilation, the result will be computed during compilation. If any of the arguments' values is not known during compilation, your code will be rejected.
+* When a constexpr function is called with one or more values that are not known during compilation, it acts like a normal function, computing its result at runtime. This means you don't need two functions to perform the same operation, one for compile-time constants and one for all other values. The constexpr function does it all.
 
 As the following code shows:
 
@@ -42,7 +42,7 @@ std::array<int, pow(3, numConds)> results;  // results has
                                             // elements
 ```
 
-Recall that the constexpr in front of pow doesn’t say that pow returns a const value, it says that if base and exp are compile-time constants, pow’s result may be used as a compile-time constant. If base and/or exp are not compile-time constants, pow’s result will be computed at runtime. That means that pow can not only be called to do things like compile-time-compute the size of a std::array, it can also be called in runtime contexts such as this:
+Recall that the constexpr in front of pow doesn't say that pow returns a const value, it says that if base and exp are compile-time constants, pow's result may be used as a compile-time constant. If base and/or exp are not compile-time constants, pow's result will be computed at runtime. That means that pow can not only be called to do things like compile-time-compute the size of a std::array, it can also be called in runtime contexts such as this:
 
 ```cpp
 auto base = readFromDB("base");
@@ -77,7 +77,7 @@ constexpr Point p1(9.4, 27.7);  // fine, "runs" constexpr
 constexpr Point p2(28.8, 5.3);  // also fine
 ```
 
-In C++11, two restrictions prevent Point’s member functions setX and setY from being declared constexpr. First, they modify the object they operate on, and in C++11, constexpr member functions are implicitly const. Second, they have void return types, and void isn’t a literal type in C++11. Both these restrictions are lifted in C++14, so in C++14, even Point’s setters can be constexpr:
+In C++11, two restrictions prevent Point's member functions setX and setY from being declared constexpr. First, they modify the object they operate on, and in C++11, constexpr member functions are implicitly const. Second, they have void return types, and void isn't a literal type in C++11. Both these restrictions are lifted in C++14, so in C++14, even Point's setters can be constexpr:
 
 ```cpp
 class Point {

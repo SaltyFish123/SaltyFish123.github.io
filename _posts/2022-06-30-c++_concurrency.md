@@ -95,17 +95,17 @@ You can use **std::thread::hardware_concurrency()** to get the indication of the
 
 ### Identifying threads
 
-Thread identifiers are of type std::thread::id and can be retrieved in two ways. First, the identifier for a thread can be obtained from its associated std::thread object by calling the get_id() member function. If the std::thread object doesn’t have an associated thread of execution, the call to get_id() returns a default-constructed std::thread::id object, which indicates “not any thread.” Alternatively, the identifier for the current thread can be obtained by calling std::this_thread::get_id() , which is also defined in the <thread> header.
+Thread identifiers are of type std::thread::id and can be retrieved in two ways. First, the identifier for a thread can be obtained from its associated std::thread object by calling the get_id() member function. If the std::thread object doesn't have an associated thread of execution, the call to get_id() returns a default-constructed std::thread::id object, which indicates "not any thread." Alternatively, the identifier for the current thread can be obtained by calling std::this_thread::get_id() , which is also defined in the <thread> header.
 
 You can read the **thread** header file and it will show the declaration of the class id of the class thread. The class id is copyable.
 
 ### join()
 
-The act of calling join() also cleans up any storage associated with the thread, so the std::thread object is no longer associated with the now-finished thread; it isn’t associated with any thread. This means that you can call join() only once for a given thread; once you’ve called join() , the std::thread object is no longer joinable, and joinable() will return false.
+The act of calling join() also cleans up any storage associated with the thread, so the std::thread object is no longer associated with the now-finished thread; it isn't associated with any thread. This means that you can call join() only once for a given thread; once you've called join() , the std::thread object is no longer joinable, and joinable() will return false.
 
 ### detach()
 
-If you don’t need to wait for a thread to finish, you can just detach it. This breaks the association of the thread with the std::thread object and ensures that std::terminate() won’t be called when the std::thread object is destroyed, even though the thread is still running in the background. The ownership and control of the detached thread is passed over to the c++ runtime library to ensure the resources associated with the thread are correctly reclaimed when the thread exits.
+If you don't need to wait for a thread to finish, you can just detach it. This breaks the association of the thread with the std::thread object and ensures that std::terminate() won't be called when the std::thread object is destroyed, even though the thread is still running in the background. The ownership and control of the detached thread is passed over to the c++ runtime library to ensure the resources associated with the thread are correctly reclaimed when the thread exits.
 
 ### thread exception safety
 
@@ -141,7 +141,7 @@ bool list_contains(int value_to_find)
 }
 ```
 
-Don’t pass pointers and references to protected data outside the scope of the lock, whether by returning them from a function, storing them in externally visible memory, or passing them as arguments to user-supplied functions.
+Don't pass pointers and references to protected data outside the scope of the lock, whether by returning them from a function, storing them in externally visible memory, or passing them as arguments to user-supplied functions.
 
 ### Avoiding deadlock
 
@@ -185,7 +185,7 @@ std::unique_lock takes more space and is a fraction slower to use than std::lock
 
 ### std::call_once and std::once_flag
 
-Suppose you have a shared resource that’s so expensive to construct that you want to do so only if it’s actually required; maybe it opens a database connection or allocates a lot of memory. Lazy initialization such as this is common in single-threaded code—each operation that requires the resource first checks to see if it has been initialized and then initializes it before use if not:
+Suppose you have a shared resource that's so expensive to construct that you want to do so only if it's actually required; maybe it opens a database connection or allocates a lot of memory. Lazy initialization such as this is common in single-threaded code—each operation that requires the resource first checks to see if it has been initialized and then initializes it before use if not:
 
 ```cpp
 std::shared_ptr<some_resource> resource_ptr;
@@ -232,7 +232,7 @@ void undefined_behaviour_with_double_checked_locking()
 }
 ```
 
-Unfortunately, this pattern is infamous for a reason: it has the potential for nasty race conditions, because the read outside the lock `1` isn’t synchronized with the write done by another thread inside the lock `3`.
+Unfortunately, this pattern is infamous for a reason: it has the potential for nasty race conditions, because the read outside the lock `1` isn't synchronized with the write done by another thread inside the lock `3`.
 
 The C++ Standards Committee also saw that this was an important scenario, and so the C++ Standard Library provides std::once_flag and std::call_once to handle this situation. Rather than locking a mutex and explicitly checking the pointer, every thread can just use std::call_once , safe in the knowledge that the pointer will have been initialized by some thread (in a properly synchronized fashion) by the time std::call_once returns. Use of std::call_once will typically have a lower overhead than using a mutex explicitly, especially when the initialization has already been done, so should be used in preference where it matches the required functionality. The following example shows the same operation as above, rewritten to use std::call_once. In this case, the initialization is done by calling a function, but it could just as easily have been done with an instance of a class with a function call operator. Like most of the functions in the standard library that take functions or predicates as arguments, std::call_once works with any function or callable object.
 
@@ -289,15 +289,15 @@ void data_processing_thread()
 }
 ```
 
-The implementation of wait() then checks the condition (by calling the supplied lambda function) and returns if it’s satisfied (the lambda function returned true ). If the condition isn’t satisfied (the lambda function returned false ), wait() unlocks the mutex and puts the thread in a blocked or waiting state. When the condition variable is notified by a call to notify_one() from the data-preparation thread, the thread wakes from its slumber (unblocks it), reacquires the lock on the mutex, and checks the condition again, returning from wait() with the mutex still locked if the condition has been satisfied. If the condition hasn’t been satisfied, the thread unlocks the mutex and resumes waiting. This is why you need the std::unique_lock rather than the std::lock_guard —the waiting thread must unlock the mutex while it’s waiting and lock it again afterward, and std::lock_guard doesn’t provide that flexibility. If the mutex remained locked while the thread was sleeping, the data-preparation thread wouldn’t be able to lock the mutex to add an item to the queue, and the waiting thread would never be able to see its condition satisfied.
+The implementation of wait() then checks the condition (by calling the supplied lambda function) and returns if it's satisfied (the lambda function returned true ). If the condition isn't satisfied (the lambda function returned false ), wait() unlocks the mutex and puts the thread in a blocked or waiting state. When the condition variable is notified by a call to notify_one() from the data-preparation thread, the thread wakes from its slumber (unblocks it), reacquires the lock on the mutex, and checks the condition again, returning from wait() with the mutex still locked if the condition has been satisfied. If the condition hasn't been satisfied, the thread unlocks the mutex and resumes waiting. This is why you need the std::unique_lock rather than the std::lock_guard —the waiting thread must unlock the mutex while it's waiting and lock it again afterward, and std::lock_guard doesn't provide that flexibility. If the mutex remained locked while the thread was sleeping, the data-preparation thread wouldn't be able to lock the mutex to add an item to the queue, and the waiting thread would never be able to see its condition satisfied.
 
 ### Waiting for one-off events with future
 
-The std:future<void> and std::shared_future<void> template specializations should be used where there’s no associated data.
+The std:future<void> and std::shared_future<void> template specializations should be used where there's no associated data.
 
-Although futures are used to communicate between threads, the future objects themselves don’t provide synchronized accesses. If multiple threads need to access a single future object, they must protect access via a mutex or other synchronization mechanism.
+Although futures are used to communicate between threads, the future objects themselves don't provide synchronized accesses. If multiple threads need to access a single future object, they must protect access via a mutex or other synchronization mechanism.
 
-If you access a single std::future object from multiple threads without additional synchronization, you have a data race and undefined behavior. This is by design: std::future models unique ownership of the asynchronous result, and the one-shot nature of get() makes such concurrent access pointless anyway—only one thread can retrieve the value, because after the first call to get() there’s no value left to retrieve.
+If you access a single std::future object from multiple threads without additional synchronization, you have a data race and undefined behavior. This is by design: std::future models unique ownership of the asynchronous result, and the one-shot nature of get() makes such concurrent access pointless anyway—only one thread can retrieve the value, because after the first call to get() there's no value left to retrieve.
 
 We can use the std::future to get the return value of an asynchronous task. std::async works like the std::thread. Just as the following code shows.
 
@@ -332,9 +332,9 @@ There are two memory models relationships, **happens-before** and **synchronizes
 
 The **synchronizes-with** relationship is something that you can get only between operations on atomic types. For synchronizes-with, the basic idea is this: a suitably tagged atomic write operation W on a variable x synchronizes-with a suitably tagged atomic read operation on x that reads the value stored by either that write ( W ), or a subsequent atomic write operation on x by the same thread that performed the initial write W , or a sequence of atomic read-modify-write operations on x (such as fetch_add() or compare_exchange_weak() ) by any thread, where the value read by the first thread in the sequence is the value written by W.
 
-For **happens-before**, it is easier. If in a single thread then if one operation (A) occurs in a statement prior to another (B) in the source code, then A happens-before B. If the operations occur in the same statement, in general there’s no happens-before relationship between them, because they’re unordered.
+For **happens-before**, it is easier. If in a single thread then if one operation (A) occurs in a statement prior to another (B) in the source code, then A happens-before B. If the operations occur in the same statement, in general there's no happens-before relationship between them, because they're unordered.
 
-If in multithreads, if operation A on one thread inter-thread happens-before operation B on another thread, then A happens-before B. Inter-thread happens-before is relatively simple and relies on the synchronizes-with relationship: if operation A in one thread synchronizes-with operation B in another thread, then A inter-thread happens-before B. It’s also a transitive relation: if A inter-thread happens-before B and B inter-thread happens-before C, then A inter-thread happens-before C.
+If in multithreads, if operation A on one thread inter-thread happens-before operation B on another thread, then A happens-before B. Inter-thread happens-before is relatively simple and relies on the synchronizes-with relationship: if operation A in one thread synchronizes-with operation B in another thread, then A inter-thread happens-before B. It's also a transitive relation: if A inter-thread happens-before B and B inter-thread happens-before C, then A inter-thread happens-before C.
 
 [order of evaluations](https://en.cppreference.com/w/cpp/language/eval_order)
 
@@ -359,15 +359,15 @@ Additional synchronization instructions can be required for sequentially consist
 
 For **memory_order_seq_cst**, it requires a single total ordering over all operations tagged memory_order_seq_cst.
 
-For **memory_order_relaxed**, operations on the same variable within a single thread still obey happens-before relationships. Relaxed operations on different variables can be freely reordered, even within the same thread. They don’t introduce synchronizes-with relationships.
+For **memory_order_relaxed**, operations on the same variable within a single thread still obey happens-before relationships. Relaxed operations on different variables can be freely reordered, even within the same thread. They don't introduce synchronizes-with relationships.
 
 For **acquire-release ordering**, atomic loads are acquire operations ( memory_order_acquire ), atomic stores are release operations ( memory_order_release ), and atomic read-modify-write operations (such as fetch_add() or exchange() ) are either acquire, release, or both ( memory_order_acq_rel ). **Synchronization is pairwise, between the thread that does the release and the thread that does the acquire. A release operation synchronizes-with anacquire operation that reads the value written.**
 
 If you mix acquire-release operations with sequentially consistent operations, the sequentially consistent loads behave like loads with acquire semantics, and sequentially consistent stores behave like stores with release semantics. Sequentially consistent read-modify-write operations behave as both acquire and release operations. Relaxed operations are still relaxed but are bound by the additional synchronizes-with and consequent happens-before relationships introduced through the use of acquire-release semantics.
 
-**Memory_order_consume** was part of the acquire-release ordering model, but it was conspicuously absent from the preceding description. This is because memory_order_consume is special: it’s all about data dependencies. There are two new relations that deal with data dependencies: **dependency-ordered-before** and **carries-a-dependency-to**. Just like sequenced-before, carries-a-dependency-to applies strictly **within a single thread** and essentially models the data dependency between operations; if the result of an operation A is used as an operand for an operation B, then A carries-a-dependency-to B. If the result of operation A is a value of a scalar type such as an int, then the relationship still applies if the result of A is stored in a variable, and that variable is then used as an operand for operation B. This operation is also transitive, so if A carries-a-dependency-to B, and B carries-a-dependency-to C, then A carries-a-dependency-to C.
+**Memory_order_consume** was part of the acquire-release ordering model, but it was conspicuously absent from the preceding description. This is because memory_order_consume is special: it's all about data dependencies. There are two new relations that deal with data dependencies: **dependency-ordered-before** and **carries-a-dependency-to**. Just like sequenced-before, carries-a-dependency-to applies strictly **within a single thread** and essentially models the data dependency between operations; if the result of an operation A is used as an operand for an operation B, then A carries-a-dependency-to B. If the result of operation A is a value of a scalar type such as an int, then the relationship still applies if the result of A is stored in a variable, and that variable is then used as an operand for operation B. This operation is also transitive, so if A carries-a-dependency-to B, and B carries-a-dependency-to C, then A carries-a-dependency-to C.
 
-On the other hand, the **dependency-ordered-before** relationship can apply between threads. It’s introduced by using atomic load operations tagged with **memory_order_consume**. This is a special case of memory_order_acquire that limits the synchronized data to direct dependencies; a store operation A tagged with memory_order_release , memory_order_acq_rel , or memory_order_seq_cst is dependency-ordered-before a load operation B tagged with memory_order_consume if the consume reads the value stored. This is as opposed to the synchronizes-with relationship you get if the load uses memory_order_acquire. If this operation B then carries-a-dependency-to some operation C, then A is also dependency-ordered-before C. One important use for this kind of memory ordering is where the **atomic operation loads a pointer to some data**. By using memory_order_consume on the load and memory_order_release on the prior store, you ensure that the pointed-to data is correctly synchronized, without imposing any synchronization requirements on any other nondependent data.
+On the other hand, the **dependency-ordered-before** relationship can apply between threads. It's introduced by using atomic load operations tagged with **memory_order_consume**. This is a special case of memory_order_acquire that limits the synchronized data to direct dependencies; a store operation A tagged with memory_order_release , memory_order_acq_rel , or memory_order_seq_cst is dependency-ordered-before a load operation B tagged with memory_order_consume if the consume reads the value stored. This is as opposed to the synchronizes-with relationship you get if the load uses memory_order_acquire. If this operation B then carries-a-dependency-to some operation C, then A is also dependency-ordered-before C. One important use for this kind of memory ordering is where the **atomic operation loads a pointer to some data**. By using memory_order_consume on the load and memory_order_release on the prior store, you ensure that the pointed-to data is correctly synchronized, without imposing any synchronization requirements on any other nondependent data.
 
 ### C++ atomic fences
 
@@ -375,23 +375,23 @@ The general idea with fences: if an acquire operation sees the result of a store
 
 ## C++ Designing lock-based concurrent data structure
 
-At the basic level, designing a data structure for concurrency means that multiple threads can access the data structure concurrently, either performing the same or distinct operations, and each thread will see a self-consistent view of the data structure. No data will be lost or corrupted, all invariants will be upheld, and there’ll be no problematic race conditions. Such a data structure is said to be **thread-safe**.
+At the basic level, designing a data structure for concurrency means that multiple threads can access the data structure concurrently, either performing the same or distinct operations, and each thread will see a self-consistent view of the data structure. No data will be lost or corrupted, all invariants will be upheld, and there'll be no problematic race conditions. Such a data structure is said to be **thread-safe**.
 
 ## C++ Designing lock-free concurrent data structure
 
-For a data structure to qualify as **lock-free**, more than one thread must be able to access the data structure concurrently. They don’t have to be able to do the same operations.
+For a data structure to qualify as **lock-free**, more than one thread must be able to access the data structure concurrently. They don't have to be able to do the same operations.
 
 A **wait-free** data structure is a **lock-free** data structure with the additional property that every thread accessing the data structure can complete its operation within a bounded number of steps, regardless of the behavior of other threads.
 
-![lock-free programming techniques](https://preshing.com/images/techniques.png)
+![lock-free programming techniques](https://preshing.com/images/techniques.png?raw=true)
 
 [Reference about lock-free programming](https://preshing.com/20120612/an-introduction-to-lock-free-programming/)
 
 ## C++ Difference between mutex and atomic
 
-Although none of these examples use mutex locks directly, it’s worth bearing in mind that only std::atomic_flag is guaranteed not to use locks in the implementation. On some platforms what appears to be lock-free (**atomic::is_lock_free** return true) code might actually be using locks internal to the C++ Standard Library implementation. On these platforms, a simple lock-based data structure might actually be more appropriate.
+Although none of these examples use mutex locks directly, it's worth bearing in mind that only std::atomic_flag is guaranteed not to use locks in the implementation. On some platforms what appears to be lock-free (**atomic::is_lock_free** return true) code might actually be using locks internal to the C++ Standard Library implementation. On these platforms, a simple lock-based data structure might actually be more appropriate.
 
-For atomic operations, deadlocks are impossible with lock-free data structures because there aren’t any locks, although there is the possibility of live locks instead. A **live lock** occurs when two threads each try to change the data structure, but for each thread the changes made by the other require the operation to be restarted, so both threads loop and try again.
+For atomic operations, deadlocks are impossible with lock-free data structures because there aren't any locks, although there is the possibility of live locks instead. A **live lock** occurs when two threads each try to change the data structure, but for each thread the changes made by the other require the operation to be restarted, so both threads loop and try again.
 
 The references is shown below:
 
