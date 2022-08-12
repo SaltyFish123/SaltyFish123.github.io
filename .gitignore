@@ -3,7 +3,7 @@ Gemfile.lock
 _site
 createPost.sh
 createDateFile.sh
-addTOC.sh
+opForAllPosts.sh
 startService.sh
 replacePNG.sh
 
