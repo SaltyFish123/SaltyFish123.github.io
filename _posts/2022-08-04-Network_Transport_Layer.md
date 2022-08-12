@@ -49,7 +49,7 @@ TCP pairs each chunk of client data with a TCP header, thereby forming **TCP seg
 
 ![TCP segment structure](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/TCP_segment_structure.png?raw=true)
 
-### sequence number and acknowledgment number
+## sequence number and acknowledgment number
 
 ![seq and ack example](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/seq_ack_example.png?raw=true)
 
@@ -59,7 +59,7 @@ Recall that TCP is full-duplex, so that Host A may be receiving data from Host B
 
 In truth, both sides of a TCP connection randomly choose an **initial sequence number(ISN)**. This is done to minimize the possibility that a segment that is still present in the network from an earlier, already-terminated connection between two hosts is mistaken for a valid segment in a later connection between these same two hosts.
 
-### Reliable Data Transfer Scenarios
+## Reliable Data Transfer Scenarios
 
 Suppose that this segment has sequence number 92 and contains 8 bytes of data. After sending this segment, Host A waits for a segment from B with acknowledgment number 100. Although the segment from A is received at B, the acknowledgment from B to A gets lost. In this case, the timeout event occurs, and Host A retransmits the same segment. Of course, when Host B receives the retransmission, it observes from the sequence number that the segment contains data that has already been received. Thus, TCP in Host B will discard the bytes in the retransmitted segment.
 
@@ -69,7 +69,7 @@ In a third and final scenario, suppose Host A sends the two segments, exactly as
 
 So when the client didn't successfully receive the expecting ACK segment, it will not always resend the oldest not acknowledged segment.
 
-### Flow Control
+## Flow Control
 
 TCP provides a flow-control service to its applications to eliminate the possibility of the sender overflowing the receiver's buffer. Flow control is thus a speed-matching service—matching the rate at which the sender is sending against the rate at which the receiving application is reading.
 
@@ -79,7 +79,7 @@ TCP provides flow control by having the sender maintain a variable called the **
 
 ![rwnd](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/rwnd.png?raw=true)
 
-### Fast Retransmit
+## Fast Retransmit
 
 One of the problems with timeout-triggered retransmissions is that the timeout period can be relatively long. When a segment is lost, this long timeout period forces the sender to delay resending the lost packet, thereby increasing the end-to-end delay. Fortunately, the sender can often detect packet loss well before the timeout event occurs by noting so-called duplicate ACKs. A **duplicate ACK** is an ACK that reacknowledges a segment for which the sender has already received an earlier acknowledgment.
 
@@ -87,7 +87,7 @@ Since TCP does not use negative acknowledgments, the receiver cannot send an exp
 
 ![TCP fast retransmit](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/TCP_fast_retransmit.png?raw=true)
 
-### Three-Way Handshake
+## Three-Way Handshake
 
 The client application process first informs the client TCP that it wants to establish a connection to a process in the server. The TCP in the client then proceeds to establish a TCP connection with the TCP in the server in the following manner:
 
@@ -99,7 +99,7 @@ Once these three steps above have been completed, the client and server hosts ca
 
 ![three-way handshake](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/three-way_handshake.png?raw=true)
 
-### Closing TCP Connection
+## Closing TCP Connection
 
 Either of the two processes participating in a TCP connection can end the connection. When a connection ends, the "resources" (that is, the buffers and variables) in the hosts are deallocated. As an example, suppose the client decides to close the connection, as shown in Figure 3.40.
 
@@ -107,18 +107,24 @@ Either of the two processes participating in a TCP connection can end the connec
 
 ![server TCP state](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/server_TCP_state.png?raw=true)
 
-The client TCP begins in the CLOSED state. The application on the client side initiates a new TCP connection. This causes TCP in the client to send a SYN segment to TCP in the server. After having sent the SYN segment, the client TCP enters the SYN_SENT state. While in the SYN_SENT state, the client TCP waits for a segment from the server TCP that includes an acknowledgment for the client's previous segment and has the SYN bit set to 1. Having received such a segment, the client TCP enters the ESTABLISHED state. While in the ESTABLISHED state, the TCP client can send and receive TCP segments containing payload (that is, application-generated) data. Suppose that the client application decides it wants to close the connection. (Note that the server could also choose to close the connection.) This causes the client TCP to send a TCP segment with the FIN bit set to 1 and to enter the FIN_WAIT_1 state. While in the FIN_WAIT_1 state, the client TCP waits for a TCP segment from the server with an acknowledgment. When it receives this segment, the client TCP enters the FIN_WAIT_2 state. While in the FIN_WAIT_2 state, the client waits for another segment from the server with the FIN bit set to 1; after receiving this segment, the client TCP acknowledges the server's segment and enters the TIME_WAIT state. **The TIME_WAIT state lets the TCP client resend the final acknowledgment in case the ACK is lost. The time spent in the TIME_WAIT state is implementation-dependent, but typical values are 30 seconds, 1 minute, and 2 minutes.**
+The client TCP begins in the CLOSED state. The application on the client side initiates a new TCP connection. This causes TCP in the client to send a SYN segment to TCP in the server. After having sent the SYN segment, the client TCP enters the SYN_SENT state. While in the SYN_SENT state, the client TCP waits for a segment from the server TCP that includes an acknowledgment for the client's previous segment and has the SYN bit set to 1. Having received such a segment, the client TCP enters the ESTABLISHED state. While in the ESTABLISHED state, the TCP client can send and receive TCP segments containing payload (that is, application-generated) data. Suppose that the client application decides it wants to close the connection. (Note that the server could also choose to close the connection.) This causes the client TCP to send a TCP segment with the FIN bit set to 1 and to enter the FIN_WAIT_1 state. While in the FIN_WAIT_1 state, the client TCP waits for a TCP segment from the server with an acknowledgment. When it receives this segment, the client TCP enters the FIN_WAIT_2 state. While in the FIN_WAIT_2 state, the client waits for another segment from the server with the FIN bit set to 1; after receiving this segment, the client TCP acknowledges the server's segment and enters the TIME_WAIT state. **The TIME_WAIT state lets the TCP client resend the final acknowledgment in case the ACK is lost. The time spent in the TIME_WAIT state is implementation-dependent, but typical values are 30 seconds, 1 minute, and 2 minutes.** The duration that this endpoint remains in this state is twice the maximum segment lifetime (MSL), sometimes called 2MSL.
 
 There are reasons for the TIME_WAIT state.
 
 1. Try the best to make sure the other host can receive the last ACK segment.
 2. Leaving enough time for the hosts to drop the outdated segments of the closing connection so that the next connection will not receive the segments of the previous connection.
 
+The first reason can be explained by looking at Figure 2.5 and assuming that the final ACK is lost. The server will resend its final FIN, so the client must maintain state information, allowing it to resend the final ACK. If it did not maintain this information, it would respond with an RST (a different type of TCP segment), which would be interpreted by the server as an error. This example also shows why the end that performs the active close is the end that remains in the TIME_WAIT state: because that end is the one that might have to retransmit the final ACK.
+
+![figure 2.5](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/socket/figure_2_5.png?raw=true)
+
+To understand the second reason for the TIME_WAIT state, assume we have a TCP connection between 12.106.32.254 port 1500 and 206.168.112.219 port 21. This connection is closed and then sometime later, we establish another connection between the same IP addresses and ports: 12.106.32.254 port 1500 and 206.168.112.219 port 21. This latter connection is called an **incarnation** of the previous connection since the IP addresses and ports are the same. TCP must prevent old duplicates from a connection from reappearing at some later time and being misinterpreted as belonging to a new incarnation of the same connection. To do this, TCP will not initiate a new incarnation of a connection that is currently in the TIME_WAIT state. **Since the duration of the TIME_WAIT state is twice the MSL, this allows MSL seconds for a packet in one direction to be lost, and another MSL seconds for the reply to be lost**. By enforcing this rule, we are guaranteed that when we successfully establish a TCP connection, all old duplicates from previous incarnations of the connection have expired in the network.
+
 After the wait, the connection formally closes and all resources on the client side (including port numbers) are released.
 
 ![client TCP state](https://github.com/SaltyFish123/SaltyFish123.github.io/blob/master/assets/images/computer_network/client_TCP_state.png?raw=true)
 
-### SYN Flood Attack
+## SYN Flood Attack
 
 In this attack, the attacker(s) send a large number of TCP SYN segments, without completing the third handshake step. With this deluge of SYN segments, the server's connection resources become exhausted as they are allocated (but never used!) for half-open connections; legitimate clients are then denied service. Such SYN flooding attacks were among the first documented DoS attacks [CERT SYN 1996]. Fortunately, an effective defense known as **SYN cookies** [RFC 4987] are now deployed in most major operating systems. SYN cookies work as follows:
 
@@ -126,7 +132,7 @@ In this attack, the attacker(s) send a large number of TCP SYN segments, without
 2. A legitimate client will return an ACK segment. When the server receives this ACK, it must verify that the ACK corresponds to some SYN sent earlier. But how is this done if the server maintains no memory about SYN segments? As you may have guessed, it is done with the cookie. Recall that for a legitimate ACK, the value in the acknowledgment field is equal to the initial sequence number in the SYNACK (the cookie value in this case) plus one. The server can then run the same hash function using the source and destination IP address and port numbers in the SYNACK (which are the same as in the original SYN) and the secret number. If the result of the function plus one is the same as the acknowledgment (cookie) value in the client's SYNACK, the server concludes that the ACK corresponds to an earlier SYN segment and is hence valid. The server then creates a fully open connection along with a socket.
 3. On the other hand, if the client does not return an ACK segment, then the original SYN has done no harm at the server, since the server hasn't yet allocated any resources in response to the original bogus SYN.
 
-### TCP Congestion Control
+## TCP Congestion Control
 
 **End-to-end congestion control**. In an end-to-end approach to congestion control, the network layer provides no explicit support to the transport layer for congestion-control purposes. Even the presence of congestion in the network must be inferred by the end systems based only on observed network behavior (for example, packet loss and delay). TCP must necessarily take this end-to-end approach toward congestion control, since the IP layer provides no feedback to the end systems regarding network congestion. TCP segment loss (as indicated by a timeout or a triple duplicate acknowledgment) is taken as an indication of network congestion and TCP decreases its window size accordingly. We will also see a more recent proposal for TCP congestion control that uses increasing round-trip delay values as indicators of increased network congestion.
 
