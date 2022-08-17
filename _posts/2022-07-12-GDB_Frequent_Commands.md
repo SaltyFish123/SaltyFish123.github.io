@@ -144,7 +144,7 @@ Note that you should make sure the source code is as the same version as the sha
 
 ## x command
 
-This command is used to display the content of the memory address. For exampl, if you have an array named `arr` which are `int arr[] = {3, 1, 2}`. Then you can use the x command to display the content of the array as the following code shows:
+This command is used to display the content of the memory address. For example, if you have an array named `arr` which are `int arr[] = {3, 1, 2}`. Then you can use the x command to display the content of the array as the following code shows:
 
 ```c
 int main(int argc, char* argv[]) {
