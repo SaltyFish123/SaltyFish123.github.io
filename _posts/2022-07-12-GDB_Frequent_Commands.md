@@ -211,6 +211,35 @@ If you choose to set ‘detach-on-fork' mode off, then GDB will retain control o
 
 To quit debugging one of the forked processes, you can either detach from it by using the detach inferiors command (allowing it to run independently), or kill it using the kill inferiors command.
 
+## Passing arguments to debugged program
+
+If you want to debug a program with command line arguments, you can use the command `set args` or the `--args` option of gdb. As the following code shows:
+
+```shell
+gdb --args ./a.out Jeoy 18
+
+//This command will pass two additional arguments to the program. "Joey" and "18"
+```
+
+If you have started the gdb with command `gdb ./a.out`, you can use the `set args` arguaments to set the arguemnts before the program is started. As the following code demonstrates:
+
+```shell
+(gdb) b main
+Breakpoint 1 at 0x167d: file client.c, line 64.
+(gdb) set args 127.0.0.1
+(gdb) r
+Starting program: /home/joey/Study_Notes/Linux_Socket_Programming/src/client 127.0.0.1
+
+Breakpoint 1, main (argc=0, argv=0x7fffffffdb80) at client.c:64
+64      int main(int argc, char* argv[]) {
+(gdb) n
+65          if (argc < 2) {
+(gdb) p argc
+$1 = 2
+(gdb) p argv[1]
+$2 = 0x7fffffffdfb8 "127.0.0.1"
+```
+
 ## References
 
 [gdb disassemble](https://visualgdb.com/gdbreference/commands/disassemble)
