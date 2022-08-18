@@ -21,6 +21,12 @@ We can broadly classify the possible services along four dimensions: **reliable 
 
 A Web page (also called a document) consists of objects. An object is simply a file -- such as an HTML file, a JPEG image, a Java applet, or a video clip -- that is addressable by a single URL. Most Web pages consist of a base HTML file and several referenced objects. For example, if a Web page contains HTML text and five JPEG images, then the Web page has six objects: the base HTML file plus the five images. The base HTML file references the other objects in the page with the objects' URLs.
 
+## Out-of-Band Data
+
+Many transport layers have the concept of out-of-band data, which is sometimes called expedited data. The idea is that something important occurs at one end of a connection and that end wants to tell its peer quickly. By "quickly" we mean that this notification should be sent before any "normal" (sometimes called "in-band") data that is already queued to be sent, and should be sent regardless of any flow control or blocking issues. That is, out-of-band data is considered higher priority than normal data. Instead of using two connections between the client and server, out-of-band data is mapped onto the existing connection. Unfortunately, once we get beyond the general concepts and down to the real world, almost every transport layer has a different implementation of out-of-band data. As an extreme example, UDP has no implementation of out-of-band data.
+
+TCP does not have true out-of-band data. It provides an urgent pointer that is sent in the TCP header to the peer as soon as the sender goes into urgent mode. The receipt of this pointer by the other end of the connection tells that process that the sender has gone into urgent mode, and the pointer points to the final byte of urgent data. But all the data is still subject to TCP's normal flow control.
+
 ## Round Trip Time (RTT)
 
 The amount of time that elapses from when a client requests the base HTML file until the entire file is received by the client. To this end, we define the **round-trip time(RTT)**, which is the time it takes for a small packet to travel from client to server and then back to the client. The RTT includes **packet-propagation delays, packet-queuing delays** in intermediate routers and switches, and **packet-processing delays**.
