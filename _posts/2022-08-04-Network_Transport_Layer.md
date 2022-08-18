@@ -138,7 +138,7 @@ In this attack, the attacker(s) send a large number of TCP SYN segments, without
 
 Let's first examine **how a TCP sender limits the rate at which it sends traffic into its connection**. The TCP congestion-control mechanism operating at the sender keeps track of an additional variable, the congestion window. **The congestion window, denoted cwnd**, imposes a constraint on the rate at which a TCP sender can send traffic into the network. Specifically, the amount of unacknowledged data at a sender may not exceed the minimum of cwnd and rwnd, that is:
 
-$$ LastByteSent – LastByteAcked <= min{cwnd, rwnd} $$
+$$ LastByteSent – LastByteAcked <= min\{cwnd, rwnd\} $$
 
 Consider a connection for which loss and packet transmission delays are negligible. Then, roughly, at the beginning of every RTT, the constraint permits the sender to send cwnd bytes of data into the connection; at the end of the RTT the sender receives acknowledgments for the data. Thus the sender's send rate is roughly **cwnd/RTT bytes/sec**. By adjusting the value of cwnd, the sender can therefore adjust the rate at which it sends data into its connection.
 
