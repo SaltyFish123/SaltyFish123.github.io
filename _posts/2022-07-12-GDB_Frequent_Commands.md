@@ -102,33 +102,171 @@ ldd temp.exe
         /lib64/ld-linux-x86-64.so.2 (0x00007fdaf2fdc000)
 ```
 
-Both **memmove** and **memcpy** function is filled into the **PLT** stub at runtime but not called as an external function directly. So we need to read the assembly code about the value that filled into the stub. For example, as the following code shows:
+As the following code shows, suppose we compile this source code to generate a program `temp.exe`.
 
-```shell
-(gdb) disass
-0x0000555555555865 <+383>:   callq  0x555555555150 <memmove@plt>
-0x0000555555555919 <+563>:   callq  0x555555555130 <memcpy@plt>
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-(gdb) b *0x555555555150
-(gdb) b *0x555555555130
+void testMemmoveMemcpy(int tag) {
+    char numbers[] = "123456789";
+    char *function;
+    function = tag == 0 ? "memcpy" : "memmove";
+    if (tag) {
+        memmove(numbers, numbers + 1, 3);
+    }
+    else {
+        memcpy(numbers, numbers + 4, 3);
+    }   
+    printf("After executing %s, numbers is %s\n", function, numbers); 
+}
+
+int main(int argc, char* argv[]) {
+    testMemmoveMemcpy(atoi(argv[1]));
+    return 0;
+}
 ```
 
-However, if we want to `step` into the glibc function  **memmove** by the breakpoint that we get from the assembler code as above example shows, we will find that things don't work as we expecting. We should first download the glibc-source by apt. Then add the glibc source directory path to the gdb source directories with command **directory**. You can use command **show directories** to see which source directories will be searched. If you don't add the glibc source directory path to the gdb source directories, you get prompted that there is no such file or directory. As the following code shows, gdb can't not file the source file ../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S from the symbol of memmove. Then we add the path of the glibc source file we downloaded and we can see now gdb can list the source code now.
+Then we run the gdb to check the source code of the glibc function `memcopy` and `memmove`.
 
 ```shell
-(gdb) n
-Single stepping until exit from function memmove@plt,
+$gdb ./temp.exe
+============================
+// Then step into the gdb process
+
+(gdb) set args 0
+(gdb) b testMemmoveMemcpy
+Breakpoint 1 at 0x2023: file temp.c, line 380.
+(gdb) disass testMemmoveMemcpy
+Dump of assembler code for function testMemmoveMemcpy:
+=> 0x0000555555556023 <+0>:     endbr64 
+   0x0000555555556027 <+4>:     push   %rbp
+   0x0000555555556028 <+5>:     mov    %rsp,%rbp
+   0x000055555555602b <+8>:     sub    $0x30,%rsp
+   0x000055555555602f <+12>:    mov    %edi,-0x24(%rbp)
+   0x0000555555556032 <+15>:    mov    %fs:0x28,%rax
+   0x000055555555603b <+24>:    mov    %rax,-0x8(%rbp)
+   0x000055555555603f <+28>:    xor    %eax,%eax
+   0x0000555555556041 <+30>:    movabs $0x3837363534333231,%rax
+   0x000055555555604b <+40>:    mov    %rax,-0x12(%rbp)
+   0x000055555555604f <+44>:    movw   $0x39,-0xa(%rbp)
+   0x0000555555556055 <+50>:    cmpl   $0x0,-0x24(%rbp)
+   0x0000555555556059 <+54>:    jne    0x555555556064 <testMemmoveMemcpy+65>
+   0x000055555555605b <+56>:    lea    0x11e4(%rip),%rax        # 0x555555557246
+   0x0000555555556062 <+63>:    jmp    0x55555555606b <testMemmoveMemcpy+72>
+   0x0000555555556064 <+65>:    lea    0x11e2(%rip),%rax        # 0x55555555724d
+   0x000055555555606b <+72>:    mov    %rax,-0x20(%rbp)
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x000055555555606f <+76>:    cmpl   $0x0,-0x24(%rbp)
+   0x0000555555556073 <+80>:    je     0x555555556093 <testMemmoveMemcpy+112>
+   0x0000555555556075 <+82>:    lea    -0x12(%rbp),%rax
+   0x0000555555556079 <+86>:    add    $0x1,%rax
+   0x000055555555607d <+90>:    lea    -0x12(%rbp),%rcx
+   0x0000555555556081 <+94>:    mov    $0x3,%edx
+   0x0000555555556086 <+99>:    mov    %rax,%rsi
+   0x0000555555556089 <+102>:   mov    %rcx,%rdi
+   0x000055555555608c <+105>:   callq  0x555555555410 <memmove@plt>
+   0x0000555555556091 <+110>:   jmp    0x5555555560af <testMemmoveMemcpy+140>
+   0x0000555555556093 <+112>:   lea    -0x12(%rbp),%rax
+   0x0000555555556097 <+116>:   add    $0x4,%rax
+   0x000055555555609b <+120>:   lea    -0x12(%rbp),%rcx
+   0x000055555555609f <+124>:   mov    $0x3,%edx
+   0x00005555555560a4 <+129>:   mov    %rax,%rsi
+   0x00005555555560a7 <+132>:   mov    %rcx,%rdi
+   0x00005555555560aa <+135>:   callq  0x5555555553c0 <memcpy@plt>
+   0x00005555555560af <+140>:   lea    -0x12(%rbp),%rdx
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x00005555555560b3 <+144>:   mov    -0x20(%rbp),%rax
+   0x00005555555560b7 <+148>:   mov    %rax,%rsi
+   0x00005555555560ba <+151>:   lea    0x1197(%rip),%rdi        # 0x555555557258
+   0x00005555555560c1 <+158>:   mov    $0x0,%eax
+   0x00005555555560c6 <+163>:   callq  0x555555555310 <printf@plt>
+   0x00005555555560cb <+168>:   nop
+   0x00005555555560cc <+169>:   mov    -0x8(%rbp),%rax
+   0x00005555555560d0 <+173>:   xor    %fs:0x28,%rax
+   0x00005555555560d9 <+182>:   je     0x5555555560e0 <testMemmoveMemcpy+189>
+   0x00005555555560db <+184>:   callq  0x5555555552f0 <__stack_chk_fail@plt>
+   0x00005555555560e0 <+189>:   leaveq 
+   0x00005555555560e1 <+190>:   retq   
+End of assembler dump.
+(gdb) b *0x555555555410
+Breakpoint 2 at 0x555555555410
+(gdb) b *0x5555555553c0
+Breakpoint 3 at 0x5555555553c0
+(gdb) disass 0x555555555410
+Dump of assembler code for function memmove@plt:
+   0x0000555555555410 <+0>:     endbr64 
+   0x0000555555555414 <+4>:     bnd jmpq *0x3b75(%rip)        # 0x555555558f90 <memmove@got.plt>
+   0x000055555555541b <+11>:    nopl   0x0(%rax,%rax,1)
+End of assembler dump.
+(gdb) x/gx 0x555555558f90
+0x555555558f90 <memmove@got.plt>:       0x00007ffff7f476e0
+(gdb) disass 0x00007ffff7f476e0
+Dump of assembler code for function __memmove_avx_unaligned_erms:
+   0x00007ffff7f476e0 <+0>:     endbr64 
+   0x00007ffff7f476e4 <+4>:     mov    %rdi,%rax
+   0x00007ffff7f476e7 <+7>:     cmp    $0x20,%rdx
+   0x00007ffff7f476eb <+11>:    jb     0x7ffff7f47736 <__memmove_avx_unaligned_erms+86>
+   0x00007ffff7f476ed <+13>:    cmp    $0x40,%rdx
+   0x00007ffff7f476f1 <+17>:    ja     0x7ffff7f47796 <__memmove_avx_unaligned_erms+182>
+   0x00007ffff7f476f7 <+23>:    vmovdqu (%rsi),%ymm0
+   0x00007ffff7f476fb <+27>:    vmovdqu -0x20(%rsi,%rdx,1),%ymm1
+   0x00007ffff7f47701 <+33>:    vmovdqu %ymm0,(%rdi)
+   0x00007ffff7f47705 <+37>:    vmovdqu %ymm1,-0x20(%rdi,%rdx,1)
+   0x00007ffff7f4770b <+43>:    vzeroupper 
+   0x00007ffff7f4770e <+46>:    retq   
+   0x00007ffff7f4770f <+47>:    cmp    0x65da2(%rip),%rdx        # 0x7ffff7fad4b8 <__x86_shared_non_temporal_threshold>
+   0x00007ffff7f47716 <+54>:    jae    0x7ffff7f47841 <__memmove_avx_unaligned_erms+353>
+   0x00007ffff7f4771c <+60>:    cmp    %rsi,%rdi
+   0x00007ffff7f4771f <+63>:    jb     0x7ffff7f47730 <__memmove_avx_unaligned_erms+80>
+   0x00007ffff7f47721 <+65>:    je     0x7ffff7f47735 <__memmove_avx_unaligned_erms+85>
+--Type <RET> for more, q to quit, c to continue without paging--q
+Quit
+(gdb) disass 0x5555555553c0
+Dump of assembler code for function memcpy@plt:
+   0x00005555555553c0 <+0>:     endbr64 
+   0x00005555555553c4 <+4>:     bnd jmpq *0x3b9d(%rip)        # 0x555555558f68 <memcpy@got.plt>
+   0x00005555555553cb <+11>:    nopl   0x0(%rax,%rax,1)
+End of assembler dump.
+(gdb) x/gx 0x555555558f68
+0x555555558f68 <memcpy@got.plt>:        0x00007ffff7f476e0
+(gdb) r
+(gdb) c
+Continuing.
+
+Breakpoint 3, 0x00005555555553c0 in memcpy@plt ()
+(gdb) s
+Single stepping until exit from function memcpy@plt,
 which has no line number information.
-Reading in symbols for ../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S...done.
 __memmove_avx_unaligned_erms () at ../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S:225
-225     ../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S: No such file or directory.
-Current language:  auto
-The current source language is "auto; currently asm".
+225     ../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S: No such file or directory
 (gdb) dir /home/joey/glibc/sysdeps/x86_64/multiarch
 Source directories searched: /home/joey/glibc/sysdeps/x86_64/multiarch:$cdir:$cwd
+(gdb) n
+226
+(gdb) disass
+Dump of assembler code for function __memmove_avx_unaligned_erms:
+   0x00007ffff7f476e0 <+0>:     endbr64 
+=> 0x00007ffff7f476e4 <+4>:     mov    %rdi,%rax
+   0x00007ffff7f476e7 <+7>:     cmp    $0x20,%rdx
+   0x00007ffff7f476eb <+11>:    jb     0x7ffff7f47736 <__memmove_avx_unaligned_erms+86>
+   0x00007ffff7f476ed <+13>:    cmp    $0x40,%rdx
+   0x00007ffff7f476f1 <+17>:    ja     0x7ffff7f47796 <__memmove_avx_unaligned_erms+182>
+   0x00007ffff7f476f7 <+23>:    vmovdqu (%rsi),%ymm0
+   0x00007ffff7f476fb <+27>:    vmovdqu -0x20(%rsi,%rdx,1),%ymm1
+   0x00007ffff7f47701 <+33>:    vmovdqu %ymm0,(%rdi)
+   0x00007ffff7f47705 <+37>:    vmovdqu %ymm1,-0x20(%rdi,%rdx,1)
+   0x00007ffff7f4770b <+43>:    vzeroupper 
+   0x00007ffff7f4770e <+46>:    retq   
+   0x00007ffff7f4770f <+47>:    cmp    0x65da2(%rip),%rdx        # 0x7ffff7fad4b8 <__x86_shared_non_temporal_threshold>
+   0x00007ffff7f47716 <+54>:    jae    0x7ffff7f47841 <__memmove_avx_unaligned_erms+353>
+   0x00007ffff7f4771c <+60>:    cmp    %rsi,%rdi
+   0x00007ffff7f4771f <+63>:    jb     0x7ffff7f47730 <__memmove_avx_unaligned_erms+80>
+   0x00007ffff7f47721 <+65>:    je     0x7ffff7f47735 <__memmove_avx_unaligned_erms+85>
+--Type <RET> for more, q to quit, c to continue without paging--q
+Quit
 (gdb) list
-warning: Source file is more recent than executable.
-220
 221     # if VEC_SIZE == 16
 222     ENTRY (__mempcpy_chk_erms)
 223             cmp     %RDX_LP, %RCX_LP
@@ -138,7 +276,18 @@ warning: Source file is more recent than executable.
 227     /* Only used to measure performance of REP MOVSB.  */
 228     ENTRY (__mempcpy_erms)
 229             mov     %RDI_LP, %RAX_LP
-```
+230             /* Skip zero length.  */
+ ```
+
+Both **memmove** and **memcpy** function is filled into the **PLT** stub at runtime but not called as an external function directly. So we need to read the assembly code about the value that filled into the stub. For example, as the above gdb operations log shows. When we disassemble the function `testMemmoveMemcpy`, we can find out that the CPU will call the function with the address that filled in while runtime. In our example, the address of `memmove@plt` is 0x555555555410 and the address of `memcpy@plt` is 0x5555555553c0. Then we set two breakpoints at these two addresses separately.
+
+As my previous post [Program Creation](https://saltyfish123.github.io/Program_Creation/) mentions, we can jump to the exact executing assembler instruction with the `PLT` address. As the code above shows, after setting two breakpoints, we can first disassemble the 0x555555555410 address. Then we can get the address of `memmove@got.plt` is 0x555555558f90. This address stores the address of the instructions of `memmove`. Then We use the `x` command to get the value stored at 0x555555558f90, which is 0x00007ffff7f476e0. 0x00007ffff7f476e0 is the exact address of the executing instruction of `memmove`. Then we run `disass 0x00007ffff7f476e0` and we can read the assembler code of the function `__memmove_avx_unaligned_erms`.
+
+The above steps repeat for the `memcpy@plt`. It is interesting that we can find out both `memcpy` and `memmove` are implemented by the instructions at address 0x00007ffff7f476e0.
+
+Then we can run our program to read the source code of `__memmove_avx_unaligned_erms`.
+
+However, if we want to `step` into the glibc function  `__memmove_avx_unaligned_erms`, we will find that things don't work as we expecting. We should first download the glibc-source by apt. Then add the glibc source directory path to the gdb source directories with command **directory**. You can use command **show directories** to see which source directories will be searched. If you don't add the glibc source directory path to the gdb source directories, you get prompted that there is no such file or directory. As the above gdb operations record shows, gdb can't not file the source file ../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S from the symbol of memmove. Then we add the path of the glibc source file we downloaded and we can see now gdb can list the source code now.
 
 Note that you should make sure the source code is as the same version as the shared library you link to. Otherwise you will not read the exact srouce code for the debugged process.
 
