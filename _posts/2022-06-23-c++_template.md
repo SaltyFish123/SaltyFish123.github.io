@@ -27,7 +27,9 @@ Notice that in the same cpp file, if you want to use explicit instantiation and 
 //in A.h
 template<typename T>
 T bigger(T lhs, T rhs);
+```
 
+```cpp
 //in A.cpp
 template<typename T>
 T bigger(T lhs, T rhs) {
@@ -36,7 +38,9 @@ T bigger(T lhs, T rhs) {
 
 //If you comment out the following code, you will get a link error.
 template int bigger(int, int);
+```
 
+```cpp
 //in main.cpp
 #include "A.h"
 
