@@ -17,10 +17,10 @@ Take a look at the following code:
 template<typename T>
 //When T is int[4], the template function will create an instance like this
 //template void printArr<int[4]>(const int (&arr)[4], int size)
-void printArr(const T& arr, int size) {
+void printArr(const T& _arr, int size) {
     // The type of arr now is const int[4]&
     cout << "The size of arr is "
-        <<sizeof(arr)/sizeof(int) << endl;
+        <<sizeof(_arr)/sizeof(int) << endl;
     for (int i = 0; i < size; i++) {
         cout << arr[i] << " ";
     }
@@ -36,9 +36,9 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-Note that if we have a function like **void printArr(const int arr[], int size)** and we pass an argument **int array[]{1, 2, 3, 4}** to the function. Though the size of argument array is int[4], when we pass it to the printArr function the local variable arr inside the function body will decays into a pointer. So sizeof(array) is sizeof(int)*4 = 16 in the main function while sizeof(arr) is sizeof(int\*) = 8.
+Note that if we have a function like **void printArr(const int _arr[], int size)** and we pass an argument **int arr[]{1, 2, 3, 4}** to the function. Though the data type of argument `arr` is int[4], when we pass it to the printArr function the local variable _arr inside the function body will decays into a pointer. So sizeof(arr) is sizeof(int)*4 = 16 in the main function while sizeof(_arr) is sizeof(int\*) = 8 in the printArr function.
 
-So we just simply pass array type to a function it will decays into a pointer, even though you explicitly declare the size of the array parameter like **int arr[4]**. If we don't want this happen, we can set the parameter data type of the function to be a reference of an array as the above code shows. Note that the array size must be constant, so it is convenient to use the template function to create an implicit instance rather than we explicitly specialize the coressponding definition for different size of array.
+So if we just simply pass array type to a function it will decays into a pointer, even though you explicitly declare the size of the array parameter like **int _arr[4]**. If we don't want this happen, we can set the parameter data type of the function to be a reference of an array as the above code shows. Note that the array size must be constant, so it is convenient to use the template function to create an implicit instance rather than we explicitly specialize the coressponding definition for different size of array.
 
 In this way, we can create an easy template function to get the array size at compile time. The following code demonstrates it.
 
@@ -72,36 +72,6 @@ f2(someFunc); // param deduced as ref-to-func;
 One more interesting thing about the c++ ponter is that for a 64 bits CPU, the c++ pointer uses only 48 bits. This is because the current AMD64 architecture is just defined to have 48bit of virtual address space (as can be seen by e.g. cat /proc/cpuinfo on linux)
 
 [参考链接](https://stackoverflow.com/questions/57483/what-are-the-differences-between-a-pointer-variable-and-a-reference-variable-in?page=1&tab=votes#tab-top)
-
-## Item28: Understand reference collapsing.
-
-As the following code shows:
-
-```cpp
-void print(const string&) {
-    cout << "This is the first func" << endl;
-}
-void print(string&&) {
-    cout << "This is the second func" << endl;
-}
-
-template<typename T>
-void p(T&& name) {
-    print(forward<T>(name));
-}
-
-int main(int argc, char* argv[]) {
-    string text = "123";
-    p(text); // This will call the first function, T is string&
-    p(move(text)); // This will call the second function, T is string
-}
-```
-
-If we pass text to p(T&& name), we can see that T is deduced as string& and the function p is p(string& && name). A reference to a reference, which is forbidden for user. When compilers generate references to references, **reference collapsing** dictates what happens next.
-
-There are two kinds of references (lvalue and rvalue), so there are four possible reference-reference combinations (lvalue to lvalue, lvalue to rvalue, rvalue to lvalue, and rvalue to rvalue). If a reference to a reference arises in a context where this is permitted (e.g., during template instantiation), the references collapse to a single reference according to this rule:
-
-* If either reference is an lvalue reference, the result is an lvalue reference. Otherwise (i.e., if both are rvalue references) the result is an rvalue reference.
 
 ## C++ Universal Reference and rvalue reference
 
@@ -138,3 +108,33 @@ When f is invoked, the type T will be deduced. But the form of param's type decl
 It is similar to the situation that auto is used. Variables declared with the type auto&& are universal references because type deduction takes place and they have the correct form ("T&&").
 
 We should use std::move() for the rvalue reference and std::forward() for the universal reference. So that we can avoid the undefined behaviour if we cast a non movable reference to a rvalue reference with the universal reference.
+
+## Item28: Understand reference collapsing.
+
+As the following code shows:
+
+```cpp
+void print(const string&) {
+    cout << "This is the first func" << endl;
+}
+void print(string&&) {
+    cout << "This is the second func" << endl;
+}
+
+template<typename T>
+void p(T&& name) {
+    print(forward<T>(name));
+}
+
+int main(int argc, char* argv[]) {
+    string text = "123";
+    p(text); // This will call the first function, T is string&
+    p(move(text)); // This will call the second function, T is string
+}
+```
+
+If we pass text to p(T&& name), we can see that T is deduced as string& and the function p is p(string& && name). A reference to a reference, which is forbidden for user. When compilers generate references to references, **reference collapsing** dictates what happens next.
+
+There are two kinds of references (lvalue and rvalue), so there are four possible reference-reference combinations (lvalue to lvalue, lvalue to rvalue, rvalue to lvalue, and rvalue to rvalue). If a reference to a reference arises in a context where this is permitted (e.g., during template instantiation), the references collapse to a single reference according to this rule:
+
+* If either reference is an lvalue reference, the result is an lvalue reference. Otherwise (i.e., if both are rvalue references) the result is an rvalue reference.
