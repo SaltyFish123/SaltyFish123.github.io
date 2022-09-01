@@ -53,12 +53,12 @@ public:
 
 int main(int argc, char* argv[]) {
     auto res1 = std::make_shared<resource>();
-    res1->res = res1;
+    res1->pres = res1;
     return 0;
 }
 ```
 
-You will find that the output of this program is only "resource constucted" without "resource destructed". That's because the reference count of the resource is 2 and res1 is now leaked. Because weak_ptr will not increase the reference count, it will prevent the cycle and everything will be fine.
+You will find that the output of this program is only "resource constucted" without "resource destructed". That's because the reference count of the resource is 2 and res1 is now leaked. Since weak_ptr will not increase the reference count, it will prevent the cycle and everything will be fine. As the code above, you can declare the pres as std::weak_ptr<resource> rather than std::shared_ptr<resource> to break the std::shared_ptr cycle.
 
 ## Item 21: Prefer std::make_unique and std::make_shared to direct use of new.
 
