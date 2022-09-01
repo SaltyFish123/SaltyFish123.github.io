@@ -102,5 +102,3 @@ int main(int argc, char* argv[]) {
 ```
 
 **T&&** is the universal reference. We can pass both lvalue reference and rvalue reference as the argument. However, the parameter **name** is always a lvalue. So we can't just simply pass the **name** parameter to print(). If we want to run the coressponding print overload, then we should use forward. It will cast name from the typename T.
-
-Notice that neither std::move nor std::forward do anything at runtime since there are constexpr keyword with their definition.
