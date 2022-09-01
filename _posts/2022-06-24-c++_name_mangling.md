@@ -37,11 +37,11 @@ nm --defined-only -l temp.exe
 
 // This is the output of the g++ compiled output file
 
-0000000000001572 T _Z5printPPiii        /home/joey/Documents/c_cpp_code/temp.c:38
-00000000000016e6 T _Z5printv    /home/joey/Documents/c_cpp_code/temp.c:48
+0000000000001572 T _Z5printPPiii        /home/joey/temp.c:38
+00000000000016e6 T _Z5printv    /home/joey/temp.c:48
 
 // This is the output of the gcc compiled output file
-0000000000001560 T print        /home/joey/Documents/c_cpp_code/temp.c:38
+0000000000001560 T print        /home/joey/temp.c:38
 
 gcc temp.c -g -o temp.exe
 
@@ -52,4 +52,4 @@ temp.c:38:6: note: previous definition of ‘print’ was here
    38 | void print(int *arr[], int rowLen, int colLen) {
 ```
 
-Ok now let's talk about the extern "C" in C++. If you want to create a C++ shared library that can be used by the C program, then you must use the extern "C" to make sure that the C++ compiler will not mangle the name of the symbol so that the linker can successfully link the correct function implementation by the symbol.
+Ok now let's talk about the extern "C" in C++. The `extern "C"` specifies that the function is defined elsewhere and uses the C-language calling convention. If you want to create a C++ library that can be used by the C library, then you must use the extern "C" to make sure that the C++ compiler will not mangle the name of the symbol so that the linker can successfully link the correct function implementation by the symbol.
