@@ -103,7 +103,7 @@ Such questions involving the data stored in a DBMS are called **queries**. A DBM
 
 A DBMS takes great care to evaluate queries as efficiently as possible. Of course, the efficiency of query evaluation is determined to a large extent by how the data is stored physically. Indexes can be used to speed up many queries - in fact, a good choice of indexes for the underlying relations can speed up each query in the preceding list.
 
-A DBMS enables users to create, modify, and query data through a **data manipulation language (DML)**. Thus, the query language is only one part of the DML, which also provides constructs to insert, delete, and modify data. The DML and DDL are collectively referred to cl.s the data sublanguage when embedded within a host language (e.g., C).
+A DBMS enables users to create, modify, and query data through a **data manipulation language (DML)**. Thus, the query language is only one part of the DML, which also provides constructs to insert, delete, and modify data. The DML and DDL are collectively referred to as the data sublanguage when embedded within a host language (e.g., C).
 
 ## Transaction Management
 
